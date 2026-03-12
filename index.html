@@ -321,30 +321,31 @@
     }
 
     function submitVote() {
-        const writeIn = document.getElementById('writein').value;
+        const writeIn = document.getElementById('writein').value.trim();
 
         if (!selectedWinner && !writeIn) {
             alert("Please select a winner or write in your favorite!");
             return;
         }
 
-        // 1. Package the data
+        // Package the data into 4 distinct payload fields
         const formData = new URLSearchParams();
         formData.append('category', currentMatch.category);
         formData.append('matchup', `${currentMatch.compA} vs ${currentMatch.compB}`);
-        formData.append('winner', selectedWinner || `Write-in: ${writeIn}`);
+        formData.append('winner', selectedWinner || "None"); // Records "None" if they only typed
+        formData.append('writein', writeIn);                   // Sends the text separately
 
         // PASTE YOUR GOOGLE WEB APP URL HERE:
         const scriptURL = 'https://script.google.com/macros/s/AKfycbzUNmmX_RrVAdTcfjqc24rG1VhikpGEzjJPp3scbhnrgYzZEpfTjrblg0mINaSSPen0/exec';
 
-        // 2. Fire the network request in the background (Fire and forget!)
+        // Fire the network request in the background
         fetch(scriptURL, { 
             method: 'POST', 
             body: formData, 
             mode: 'no-cors' 
-        }).catch(error => console.error('Error saving vote in background:', error));
+        }).catch(error => console.error('Error saving vote:', error));
 
-        // 3. INSTANTLY advance the progress and load the next match
+        // INSTANTLY advance the progress and load the next match
         voteCount++;
         if (voteCount >= maxVotes) {
             showThankYouScreen();
