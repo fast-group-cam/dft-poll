@@ -171,6 +171,31 @@
         .share-btn:hover {
             opacity: 0.9;
         }
+	.incentive-box {
+            background-color: #f8f9fa;
+            border: 2px dashed #bdc3c7;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 25px 0;
+            color: #2c3e50;
+        }
+        .play-again-btn {
+            display: inline-block;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #fff;
+            background-color: #e67e22; /* Vibrant Orange */
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+        .play-again-btn:hover {
+            background-color: #d35400;
+            transform: scale(1.02);
+        }
         
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
@@ -210,10 +235,15 @@
     <div id="thank-you-section" class="thank-you-container hidden">
         <div class="thank-you-title">🎉 Tournament Complete!</div>
         <p class="thank-you-text">
-            Thank you for defending your favorite methods! We are compiling all the data to find the community's undisputed champion for water-solid interfaces. 
-            <br><br>
-            <strong>The final benchmark paper is coming soon!</strong>
+            Thank you for defending your favorite methods! We are compiling all the data to find the community's undisputed champion for water-solid interfaces.
         </p>
+        
+        <div class="incentive-box">
+            <p><strong>The battles are completely random.</strong> <br>With hundreds of possible combinations, your next 10 matchups will be totally unique. Will PBE face off against r²SCAN next time? Will VASP clash with CP2K?</p>
+            <button class="play-again-btn" onclick="restartPoll()">🔄 Play Another 10 Rounds</button>
+        </div>
+
+        <br><br>
         <a href="https://www.linkedin.com" target="_blank" class="share-btn">Brag about your votes on LinkedIn</a>
     </div>
 
@@ -358,6 +388,22 @@
             updateProgress();
             loadRandomMatch();
         }
+    }
+
+    function restartPoll() {
+        // Reset the counter
+        voteCount = 0;
+        
+        // Hide the Thank You screen
+        document.getElementById('thank-you-section').classList.add('hidden');
+        
+        // Un-hide the voting section and subtitle
+        document.getElementById('voting-section').classList.remove('hidden');
+        document.getElementById('subtitle').classList.remove('hidden');
+        
+        // Update the progress bar back to 0/10 and load a new match
+        updateProgress();
+        loadRandomMatch();
     }
     // Initialize the first match
     window.onload = function() {
