@@ -328,29 +328,34 @@
             return;
         }
 
-        // Determine the actual Winner and Loser
         let actualWinner = "None";
         let actualLoser = "None";
 
-        if (selectedWinner) {
+        // Determine what happened: Button + Text, Button Only, or Text Only
+        if (selectedWinner && writeIn) {
+            // 1. They clicked a button AND typed a comment
             actualWinner = selectedWinner;
-            // The loser is whichever option they DIDN'T click
             actualLoser = (selectedWinner === currentMatch.compA) ? currentMatch.compB : currentMatch.compA;
-        } else {
-            // If they only typed a write-in and didn't click a button
+            // The 'writeIn' variable will automatically carry their typed text to Column E
+        } else if (selectedWinner) {
+            // 2. They ONLY clicked a button
+            actualWinner = selectedWinner;
+            actualLoser = (selectedWinner === currentMatch.compA) ? currentMatch.compB : currentMatch.compA;
+        } else if (writeIn) {
+            // 3. They ONLY typed a write-in (didn't click a button)
             actualWinner = "Write-in";
-            actualLoser = `${currentMatch.compA} & ${currentMatch.compB}`; // Both lost to the write-in
+            actualLoser = `${currentMatch.compA} & ${currentMatch.compB}`; // Both options lost to the write-in
         }
 
-        // Package the data into the new structure
+        // Package the data
         const formData = new URLSearchParams();
         formData.append('category', currentMatch.category);
         formData.append('winner', actualWinner);
         formData.append('loser', actualLoser);
-        formData.append('writein', writeIn);
+        formData.append('writein', writeIn); // Catches the text in all scenarios!
 
         // PASTE YOUR GOOGLE WEB APP URL HERE:
-        const scriptURL = 'YOUR_GOOGLE_WEB_APP_URL_HERE';
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbzUNmmX_RrVAdTcfjqc24rG1VhikpGEzjJPp3scbhnrgYzZEpfTjrblg0mINaSSPen0/exec';
 
         // Fire the network request in the background
         fetch(scriptURL, { 
