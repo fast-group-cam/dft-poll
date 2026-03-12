@@ -334,24 +334,24 @@
         formData.append('matchup', `${currentMatch.compA} vs ${currentMatch.compB}`);
         formData.append('winner', selectedWinner || `Write-in: ${writeIn}`);
 
-        // 2. PASTE YOUR GOOGLE WEB APP URL HERE:
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbxRRrN8ge54Ro3DIlYuEvYKT-EuFUHVzzdKjIKVjH_mAuZc142sMj0nMVqNfOXxS8Fw/exec';
+        // PASTE YOUR GOOGLE WEB APP URL HERE:
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbzUNmmX_RrVAdTcfjqc24rG1VhikpGEzjJPp3scbhnrgYzZEpfTjrblg0mINaSSPen0/exec';
 
-        // 3. Send the data to Google Sheets in the background
+        // 2. Fire the network request in the background (Fire and forget!)
         fetch(scriptURL, { 
             method: 'POST', 
             body: formData, 
-            mode: 'no-cors' // This prevents browser security blocks
-        }).then(() => {
-            // After sending, advance the progress and load the next match
-            voteCount++;
-            if (voteCount >= maxVotes) {
-                showThankYouScreen();
-            } else {
-                updateProgress();
-                loadRandomMatch();
-            }
-        }).catch(error => console.error('Error!', error.message));
+            mode: 'no-cors' 
+        }).catch(error => console.error('Error saving vote in background:', error));
+
+        // 3. INSTANTLY advance the progress and load the next match
+        voteCount++;
+        if (voteCount >= maxVotes) {
+            showThankYouScreen();
+        } else {
+            updateProgress();
+            loadRandomMatch();
+        }
     }
     // Initialize the first match
     window.onload = function() {
