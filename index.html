@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DFT March Madness: The Ultimate Setup</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.05);
+            max-width: 600px;
+            width: 100%;
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        p.subtitle {
+            text-align: center;
+            color: #7f8c8d;
+            margin-bottom: 25px;
+        }
+        
+        /* Progress Bar Styles */
+        .progress-container {
+            width: 100%;
+            background-color: #ecf0f1;
+            border-radius: 8px;
+            height: 12px;
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 100%;
+            background-color: #27ae60;
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+        .progress-text {
+            text-align: right;
+            font-size: 0.8rem;
+            color: #7f8c8d;
+            margin-top: -20px;
+            margin-bottom: 20px;
+        }
+
+        .category-label {
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: #e74c3c;
+            margin-bottom: 5px;
+            letter-spacing: 1px;
+        }
+        .division-label {
+            text-align: center;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #7f8c8d;
+            margin-bottom: 20px;
+        }
+        .matchup-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            gap: 15px;
+        }
+        .combatant-btn {
+            flex: 1;
+            padding: 25px 15px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #fff;
+            background-color: #3498db;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.1s, background-color 0.2s;
+            word-wrap: break-word;
+        }
+        .combatant-btn:hover {
+            background-color: #2980b9;
+            transform: scale(1.02);
+        }
+        .combatant-btn.selected {
+            background-color: #27ae60;
+            box-shadow: 0 0 0 4px rgba(39, 174, 96, 0.3);
+        }
+        .vs {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #bdc3c7;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #34495e;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #fff;
+            background-color: #2c3e50;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background-color 0.2s;
+        }
+        .submit-btn:hover {
+            background-color: #1a252f;
+        }
+        
+        /* Thank You Screen Styles */
+        .hidden {
+            display: none !important;
+        }
+        .thank-you-container {
+            text-align: center;
+            padding: 40px 10px;
+            animation: fadeIn 0.8s;
+        }
+        .thank-you-title {
+            font-size: 2.2rem;
+            color: #27ae60;
+            margin-bottom: 15px;
+        }
+        .thank-you-text {
+            font-size: 1.1rem;
+            color: #34495e;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+        .share-btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background-color: #0077b5; /* LinkedIn Blue */
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+            transition: opacity 0.2s;
+        }
+        .share-btn:hover {
+            opacity: 0.9;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>DFT March Madness 🏆</h1>
+    <p class="subtitle" id="subtitle">Vote on the ultimate setups for water-solid interfaces.</p>
+
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+    <div class="progress-text" id="progressText">0 / 10 Matchups Completed</div>
+
+    <div id="voting-section">
+        <div class="category-label" id="categoryName">Loading Category...</div>
+        <div class="division-label" id="divisionName">Loading Division...</div>
+
+        <div class="matchup-container">
+            <button class="combatant-btn" id="optionA" onclick="selectWinner('A')">Option A</button>
+            <div class="vs">VS</div>
+            <button class="combatant-btn" id="optionB" onclick="selectWinner('B')">Option B</button>
+        </div>
+
+        <div class="form-group">
+            <label for="writein" id="writein-label">Missing your favorite? Write it in here:</label>
+            <input type="text" id="writein" placeholder="Type your write-in vote...">
+        </div>
+
+        <button class="submit-btn" onclick="submitVote()">Submit Vote & Next Match</button>
+    </div>
+
+    <div id="thank-you-section" class="thank-you-container hidden">
+        <div class="thank-you-title">🎉 Tournament Complete!</div>
+        <p class="thank-you-text">
+            Thank you for defending your favorite methods! We are compiling all the data to find the community's undisputed champion for water-solid interfaces. 
+            <br><br>
+            <strong>The final benchmark paper is coming soon!</strong>
+        </p>
+        <a href="https://www.linkedin.com" target="_blank" class="share-btn">Brag about your votes on LinkedIn</a>
+    </div>
+
+</div>
+
+<script>
+    // The Master Database of Matchups
+    const tournamentData = {
+        "DFT Functionals": {
+            "The GGA Workhorses": ["PBE", "RPBE", "optB88-vdW", "BEEF-vdW"],
+            "The Meta-GGA Mavericks": ["r²SCAN", "SCAN", "M06-L", "B97M-rV"],
+            "The Hybrid Heavyweights": ["HSE06", "B3LYP", "PBE0", "revPBE0"],
+            "The High-Rung Elites": ["RPA", "XYG3", "wB97X-V", "B2PLYP"]
+        },
+        "Dispersion Corrections": {
+            "The Empirical Classics": ["Grimme D3(BJ)", "Grimme D4", "Tkatchenko-Scheffler (TS)", "Many-Body Dispersion (MBD)"],
+            "The Non-Locals": ["vdW-DF1", "vdW-DF2", "rVV10", "optPBE-vdW"]
+        },
+        "DFT Codes": {
+            "Plane-Wave Powerhouses": ["VASP", "Quantum ESPRESSO", "CASTEP", "ABINIT"],
+            "Localized & Mixed Basis": ["CP2K", "FHI-aims", "PySCF", "Siesta"]
+        }
+    };
+
+    let selectedWinner = null;
+    let currentMatch = {};
+    
+    // Limits and Progress Tracking
+    let voteCount = 0;
+    const maxVotes = 10;
+
+    function updateProgress() {
+        const percentage = (voteCount / maxVotes) * 100;
+        document.getElementById('progressBar').style.width = percentage + '%';
+        document.getElementById('progressText').innerText = `${voteCount} / ${maxVotes} Matchups Completed`;
+    }
+
+    function getWeightedCategory() {
+        // Creates a 2:1:1 weighting system (50% Functionals, 25% Dispersion, 25% Codes)
+        const weightedPool = [
+            "DFT Functionals", "DFT Functionals", 
+            "Dispersion Corrections", 
+            "DFT Codes"
+        ];
+        return weightedPool[Math.floor(Math.random() * weightedPool.length)];
+    }
+
+    function loadRandomMatch() {
+        // Reset selections
+        selectedWinner = null;
+        document.getElementById('optionA').classList.remove('selected');
+        document.getElementById('optionB').classList.remove('selected');
+        document.getElementById('writein').value = '';
+
+        // 1. Pick a category based on our 2:1:1 weights
+        const randomCategory = getWeightedCategory();
+        
+        // 2. Pick a random Division within that Category
+        const divisions = Object.keys(tournamentData[randomCategory]);
+        const randomDivision = divisions[Math.floor(Math.random() * divisions.length)];
+        
+        // 3. Get the combatants array
+        const combatants = tournamentData[randomCategory][randomDivision];
+
+        // 4. Pick two random, unique combatants
+        let idxA = Math.floor(Math.random() * combatants.length);
+        let idxB = Math.floor(Math.random() * combatants.length);
+        while (idxA === idxB) {
+            idxB = Math.floor(Math.random() * combatants.length);
+        }
+
+        currentMatch = {
+            category: randomCategory,
+            division: randomDivision,
+            compA: combatants[idxA],
+            compB: combatants[idxB]
+        };
+
+        // Update the UI
+        document.getElementById('categoryName').innerText = `Category: ${currentMatch.category}`;
+        document.getElementById('divisionName').innerText = `(${currentMatch.division})`;
+        document.getElementById('optionA').innerText = currentMatch.compA;
+        document.getElementById('optionB').innerText = currentMatch.compB;
+        document.getElementById('writein-label').innerText = `Missing your favorite in ${currentMatch.category}? Write it in here:`;
+    }
+
+    function selectWinner(choice) {
+        selectedWinner = choice === 'A' ? currentMatch.compA : currentMatch.compB;
+        
+        // Handle UI highlight
+        if (choice === 'A') {
+            document.getElementById('optionA').classList.add('selected');
+            document.getElementById('optionB').classList.remove('selected');
+        } else {
+            document.getElementById('optionB').classList.add('selected');
+            document.getElementById('optionA').classList.remove('selected');
+        }
+    }
+
+    function showThankYouScreen() {
+        document.getElementById('voting-section').classList.add('hidden');
+        document.getElementById('subtitle').classList.add('hidden');
+        document.getElementById('thank-you-section').classList.remove('hidden');
+        updateProgress(); // Ensure it shows 10/10 visually
+    }
+
+    function submitVote() {
+        const writeIn = document.getElementById('writein').value;
+
+        if (!selectedWinner && !writeIn) {
+            alert("Please select a winner or write in your favorite!");
+            return;
+        }
+
+        // 1. Package the data
+        const formData = new URLSearchParams();
+        formData.append('category', currentMatch.category);
+        formData.append('matchup', `${currentMatch.compA} vs ${currentMatch.compB}`);
+        formData.append('winner', selectedWinner || `Write-in: ${writeIn}`);
+
+        // 2. PASTE YOUR GOOGLE WEB APP URL HERE:
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbxRRrN8ge54Ro3DIlYuEvYKT-EuFUHVzzdKjIKVjH_mAuZc142sMj0nMVqNfOXxS8Fw/exec';
+
+        // 3. Send the data to Google Sheets in the background
+        fetch(scriptURL, { 
+            method: 'POST', 
+            body: formData, 
+            mode: 'no-cors' // This prevents browser security blocks
+        }).then(() => {
+            // After sending, advance the progress and load the next match
+            voteCount++;
+            if (voteCount >= maxVotes) {
+                showThankYouScreen();
+            } else {
+                updateProgress();
+                loadRandomMatch();
+            }
+        }).catch(error => console.error('Error!', error.message));
+    }
+    // Initialize the first match
+    window.onload = function() {
+        updateProgress();
+        loadRandomMatch();
+    };
+</script>
+
+</body>
+</html>
