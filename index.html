@@ -196,6 +196,51 @@
             background-color: #d35400;
             transform: scale(1.02);
         }
+	.landing-container {
+            text-align: left;
+            animation: fadeIn 0.5s ease-in;
+        }
+        .landing-container h2 {
+            color: #2c3e50;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .intro-text {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #34495e;
+            margin-bottom: 15px;
+        }
+        .feature-list {
+            background-color: #f8f9fa;
+            border-left: 4px solid #3498db;
+            padding: 20px 20px 20px 40px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 30px;
+        }
+        .feature-list li {
+            margin-bottom: 10px;
+            font-size: 1.05rem;
+            color: #2c3e50;
+        }
+        .start-btn {
+            width: 100%;
+            padding: 18px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #fff;
+            background-color: #27ae60;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+            box-shadow: 0 4px 6px rgba(39, 174, 96, 0.2);
+        }
+        .start-btn:hover {
+            background-color: #219653;
+            transform: translateY(-2px);
+        }
         
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
@@ -214,7 +259,25 @@
     </div>
     <div class="progress-text" id="progressText">0 / 10 Matchups Completed</div>
 
-    <div id="voting-section">
+    <div id="landing-section" class="landing-container">
+        <h2>The "Wild West" of Water-Solid DFT</h2>
+        <p class="intro-text">
+            Right now, modeling water on solid surfaces is a free-for-all. Every paper uses a different functional, a different dispersion correction, and a different basis set. Comparing results is almost impossible.
+        </p>
+        <p class="intro-text">
+            <strong>We want to find the community consensus.</strong> We are crowdsourcing the ultimate DFT setup to guide a massive, upcoming benchmark study—and we need your expertise.
+        </p>
+        
+        <ul class="feature-list">
+            <li>⏱️ <strong>Takes 60 seconds:</strong> Just 10 rapid-fire, random matchups.</li>
+            <li>🥊 <strong>Head-to-Head:</strong> Vote for your daily driver, or add comments.</li>
+            <li>📊 <strong>Shape the Benchmark:</strong> Your votes will directly influence the methods tested in our next paper.</li>
+        </ul>
+
+        <button class="start-btn" onclick="startTournament()">Enter the Arena 🚀</button>
+    </div>
+
+    <div id="voting-section" class="hidden">
         <div class="category-label" id="categoryName">Loading Category...</div>
         <div class="division-label" id="divisionName">Loading Division...</div>
 
@@ -405,10 +468,32 @@
         updateProgress();
         loadRandomMatch();
     }
-    // Initialize the first match
-    window.onload = function() {
+
+    function startTournament() {
+        // Hide the landing page
+        document.getElementById('landing-section').classList.add('hidden');
+        
+        // Show the voting section 
+        document.getElementById('voting-section').classList.remove('hidden');
+        
+        // Show the progress bar and text (adjust the IDs if yours are named differently)
+        const progressContainer = document.querySelector('.progress-container');
+        const progressText = document.getElementById('progressText');
+        if (progressContainer) progressContainer.classList.remove('hidden');
+        if (progressText) progressText.classList.remove('hidden');
+        
+        // Start the game!
         updateProgress();
         loadRandomMatch();
+    }
+
+    // Initialize the first match
+    window.onload = function() {
+        // Hide progress elements on the landing page when the site first loads
+        const progressContainer = document.querySelector('.progress-container');
+        const progressText = document.getElementById('progressText');
+        if (progressContainer) progressContainer.classList.add('hidden');
+        if (progressText) progressText.classList.add('hidden');
     };
 </script>
 
