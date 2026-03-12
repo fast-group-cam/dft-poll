@@ -328,15 +328,29 @@
             return;
         }
 
-        // Package the data into 4 distinct payload fields
+        // Determine the actual Winner and Loser
+        let actualWinner = "None";
+        let actualLoser = "None";
+
+        if (selectedWinner) {
+            actualWinner = selectedWinner;
+            // The loser is whichever option they DIDN'T click
+            actualLoser = (selectedWinner === currentMatch.compA) ? currentMatch.compB : currentMatch.compA;
+        } else {
+            // If they only typed a write-in and didn't click a button
+            actualWinner = "Write-in";
+            actualLoser = `${currentMatch.compA} & ${currentMatch.compB}`; // Both lost to the write-in
+        }
+
+        // Package the data into the new structure
         const formData = new URLSearchParams();
         formData.append('category', currentMatch.category);
-        formData.append('matchup', `${currentMatch.compA} vs ${currentMatch.compB}`);
-        formData.append('winner', selectedWinner || "None"); // Records "None" if they only typed
-        formData.append('writein', writeIn);                   // Sends the text separately
+        formData.append('winner', actualWinner);
+        formData.append('loser', actualLoser);
+        formData.append('writein', writeIn);
 
         // PASTE YOUR GOOGLE WEB APP URL HERE:
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbzUNmmX_RrVAdTcfjqc24rG1VhikpGEzjJPp3scbhnrgYzZEpfTjrblg0mINaSSPen0/exec';
+        const scriptURL = 'YOUR_GOOGLE_WEB_APP_URL_HERE';
 
         // Fire the network request in the background
         fetch(scriptURL, { 
